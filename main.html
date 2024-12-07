@@ -1,34 +1,47 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Główna Strona</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Головна сторінка</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="content">
-        <h1>BOCAS</h1>
-        <p>Witaj, użytkowniku!</p>
 
-        <!-- Menu -->
-        <div class="menu">
-            <button class="btn" id="profileButton">Profil</button>
-            <button class="btn" id="postsButton">Posty i Aktualności</button>
-            <button class="btn" id="logoutButton">Wyloguj</button>
+    <div class="sidebar">
+        <h2>Меню</h2>
+        <ul>
+            <li><a href="#" id="profileButton">Профіль</a></li>
+            <li><a href="#" id="postsButton">Пости</a></li>
+        </ul>
+        <button id="logoutButton">Вихід</button>
+    </div>
+
+    <div class="main-content">
+        <h1>Ласкаво просимо на вашу головну сторінку!</h1>
+
+        <div id="profileSection" class="hidden">
+            <h2>Ваш профіль</h2>
+            <p>Інформація про користувача...</p>
         </div>
 
-        <div class="section" id="profileSection">
-            <h2>Twój profil</h2>
-            <p>Tu możesz zobaczyć i edytować swoje dane.</p>
-        </div>
-
-        <div class="section" id="postsSection">
-            <h2>Posty i Aktualności</h2>
-            <p>Przeglądaj najnowsze posty i aktualności.</p>
+        <div id="postsSection">
+            <h2>Пости та новини</h2>
+            <div class="posts">
+                <div class="post">
+                    <h3>Заголовок посту 1</h3>
+                    <p>Опис посту 1...</p>
+                </div>
+                <div class="post">
+                    <h3>Заголовок посту 2</h3>
+                    <p>Опис посту 2...</p>
+                </div>
+            </div>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/supabase.min.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>

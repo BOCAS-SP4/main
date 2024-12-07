@@ -99,4 +99,25 @@ logoutButton.addEventListener('click', async () => {
         console.error('Błąd podczas wylogowywania:', error.message);
     }
 });
+// Обробка кнопок меню на головній сторінці
+const profileButton = document.getElementById('profileButton');
+const postsButton = document.getElementById('postsButton');
+const logoutButton = document.getElementById('logoutButton');
 
+const profileSection = document.getElementById('profileSection');
+const postsSection = document.getElementById('postsSection');
+
+// Показати профіль
+profileButton.addEventListener('click', () => {
+    profileSection.style.display = 'block';
+    postsSection.style.display = 'none';
+});
+
+// Показати пости та новини
+postsButton.addEventListener('click', () => {
+    postsSection.style.display = 'block';
+    profileSection.style.display = 'none';
+});
+
+// Вихід з акаунта
+logoutButton.addEventListener('click', logout);

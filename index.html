@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strona Główna</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <div class="content">
+        <h1>BOCAS</h1>
+        <p>Wybierz jedną z opcji:</p>
+        <button id="loginButton" class="btn">Logowanie</button>
+        <button id="createAccountButton" class="btn">Stwórz konto</button>
+    </div>
+
+    <!-- Modal do stworzenia konta -->
+    <div id="createAccountModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Stwórz konto</h2>
+            <form id="createAccountForm">
+                <label for="username">Login:</label>
+                <input type="text" id="username" name="username" required><br>
+
+                <label for="password1">Hasło:</label>
+                <input type="password" id="password1" name="password1" required><br>
+
+                <label for="password2">Powtórz hasło:</label>
+                <input type="password" id="password2" name="password2" required><br>
+
+                <button type="submit" class="btn">Zarejestruj</button>
+                <button type="button" onclick="closeModal()" class="btn">Anuluj</button>
+            </form>
+            <p id="error-message"></p>
+        </div>
+    </div>
+
+    <!-- Modal do logowania -->
+    <div id="loginModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Logowanie</h2>
+            <form id="loginForm">
+                <label for="loginUsername">Login:</label>
+                <input type="text" id="loginUsername" name="loginUsername" required><br>
+
+                <label for="loginPassword">Hasło:</label>
+                <input type="password" id="loginPassword" name="loginPassword" required><br>
+
+                <button type="submit" class="btn">Zaloguj się</button>
+                <button type="button" onclick="closeLoginModal()" class="btn">Anuluj</button>
+            </form>
+            <p id="loginErrorMessage"></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

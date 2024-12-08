@@ -56,68 +56,84 @@ createAccountForm.addEventListener('submit', async (event) => {
             errorMessage.textContent = error.message;
         } else {
             errorMessage.textContent = 'Konto zostało utworzone!';
-        }
-    } catch (error) {
+// Ініціалізація Supabase
+const { createClient } = require('@supabase/supabase-js');
+const supabase = createClient('https://your-supabase-url', 'your-anon-key');
+
+// Elements
+const loginButton = document.getElementById('loginButton');
+const createAccountButton = document.getElementById('createAccountButton');
+const createAccountModal = document.getElementById('createAccountModal');
+const loginModal = document.getElementById('loginModal');
+const errorMessage = document.getElementById('error-message');
+const loginErrorMessage = document.getElementById('loginErrorMessage');
+
+// Show create account modal
+createAccountButton.addEventListener('click', () => {
+    createAccountModal.style.display = 'flex';
+});
+
+// Show login modal
+loginButton.addEventListener('click', () => {
+    loginModal.style.display = 'flex';
+});
+
+// Close modals
+function closeModal() {
+    createAccountModal.style.display = 'none';
+}
+
+function closeLoginModal() {
+    loginModal.style.display = 'none';
+}
+
+// Реєстрація
+document.getElementById('createAccountForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const username = document.getElementById('username').value;
+    const password1 = document.getElementById('password1').value;
+    const password2 = document.getElementById('password2').value;
+
+    if (password1 !== password2) {
+        errorMessage.textContent = "Паролі не співпадають!";
+        return;
+    }
+
+    const { user, session, error } = await supabase.auth.signUp({
+        email: username,
+        password: password1,
+    });
+
+    if (error) {
         errorMessage.textContent = error.message;
+    } else {
+        alert("Реєстрація успішна!"); 
+        window.location.href = "main.html"; // Перенаправлення на main.html
     }
 });
 
-// Обробка форми логіну
-const loginForm = document.getElementById('loginForm');
-loginForm.addEventListener('submit', async (event) => {
-    event.preventDefault();  // Запобігає перезавантаженню сторінки
+// Логін
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const loginUsername = document.getElementById('loginUsername').value;
+    const loginPassword = document.getElementById('loginPassword').value;
 
-    const username = document.getElementById('loginUsername').value;
-    const password = document.getElementById('loginPassword').value;
+    const { user, session, error } = await supabase.auth.signIn({
+        email: loginUsername,
+        password: loginPassword,
+    });
 
-    try {
-        // Логін за допомогою Supabase
-        const { user, error } = await supabase.auth.signInWithPassword({
-            email: username,  // Тут ми використовуємо email як логін
-            password: password,
-        });
-
-        if (error) {
-            // Якщо є помилка при логіні, вивести її
-            loginErrorMessage.textContent = error.message;
-        } else {
-            // Перенаправити на головну сторінку після успішного логіну
-            window.location.href = 'main.html';  // Відкриває main.html після успішного логіну
-        }
-    } catch (error) {
-        loginErrorMessage.textContent = 'Wystąpił błąd podczas logowania.';
+    if (error) {
+        loginErrorMessage.textContent = error.message;
+    } else {
+        alert("Логін успішний!");
+        window.location.href = "main.html"; // Перенаправлення на main.html
     }
 });
 
-// Вихід з акаунта
-const logoutButton = document.getElementById('logoutButton');
-logoutButton.addEventListener('click', async () => {
-    try {
-        await supabase.auth.signOut();
-        window.location.href = 'index.html';  // Перенаправлення на сторінку логіну
-    } catch (error) {
-        console.error('Błąd podczas wylogowywania:', error.message);
-    }
-});
-// Обробка кнопок меню на головній сторінці
-const profileButton = document.getElementById('profileButton');
-const postsButton = document.getElementById('postsButton');
-const logoutButton = document.getElementById('logoutButton');
+// Логін через Google
+async function signInWithGoogle() {
+    const { user, session, error } = await supabase.auth.signIn({ provider: 'google' });
+}
 
-const profileSection = document.getElementById('profileSection');
-const postsSection = document.getElementById('postsSection');
-
-// Показати профіль
-profileButton.addEventListener('click', () => {
-    profileSection.style.display = 'block';
-    postsSection.style.display = 'none';
-});
-
-// Показати пости та новини
-postsButton.addEventListener('click', () => {
-    postsSection.style.display = 'block';
-    profileSection.style.display = 'none';
-});
-
-// Вихід з акаунта
-logoutButton.addEventListener('click', logout);
+// Додайте кнопку для логіну через Google у ваш HTML

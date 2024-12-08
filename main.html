@@ -1,47 +1,48 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Головна сторінка</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <title>Strona Główna</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <div class="sidebar">
-        <h2>Меню</h2>
-        <ul>
-            <li><a href="#" id="profileButton">Профіль</a></li>
-            <li><a href="#" id="postsButton">Пости</a></li>
-        </ul>
-        <button id="logoutButton">Вихід</button>
+    <h1>Strona Główna BOCAS</h1>
+    
+    <div id="postsContainer">
+        <!-- Тут будуть пости від uczniów або новiny od klas -->
     </div>
 
-    <div class="main-content">
-        <h1>Ласкаво просимо на вашу головну сторінку!</h1>
+    <script src="script.js"></script>
+    <script>
+        // Перевірка авторизації
+        const user = supabase.auth.user();
+        if (!user) {
+            alert("Nie jesteś zalogowany! Przejdź do strony logowania.");
+            window.location.href = "index.html"; // Перенаправлення на index.html
+        }
 
-        <div id="profileSection" class="hidden">
-            <h2>Ваш профіль</h2>
-            <p>Інформація про користувача...</p>
-        </div>
+        // Тут ви можете додати код для отримання та відображення постів
+        async function loadPosts() {
+            // Код для отримання постів з бази даних
+            const { data: posts, error } = await supabase
+                .from('posts')
+                .select('*');
 
-        <div id="postsSection">
-            <h2>Пости та новини</h2>
-            <div class="posts">
-                <div class="post">
-                    <h3>Заголовок посту 1</h3>
-                    <p>Опис посту 1...</p>
-                </div>
-                <div class="post">
-                    <h3>Заголовок посту 2</h3>
-                    <p>Опис посту 2...</p>
-                </div>
-            </div>
-        </div>
-    </div>
+            if (error) {
+                console.error("Błąd podczas ładowania postów:", error);
+                return;
+            }
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/supabase.min.js"></script>
-    <script src="main.js"></script>
+            const postsContainer = document.getElementById('postsContainer');
+            posts.forEach(post => {
+                const postElement = document.createElement('div');
+                postElement.innerHTML = `<h3>${post.title}</h3><p>${post.content}</p>`;
+                postsContainer.appendChild(postElement);
+            });
+        }
+
+        loadPosts(); // Завантажити пости при завантаженні сторінки
+    </script>
 </body>
 </html>

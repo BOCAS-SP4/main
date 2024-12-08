@@ -3,18 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Strona Główna</title>
+    <title>Strona Główna BOCAS</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Strona Główna BOCAS</h1>
-    
-    <div id="postsContainer">
-        <!-- Тут будуть пости від uczniów або новiny od klas -->
+    <div class="content">
+        <h1>Witaj w BOCAS!</h1>
+        <p>Oto najnowsze posty od uczniów i klas:</p>
+
+        <div id="postsContainer">
+            <!-- Poniżej będą wyświetlane posty -->
+        </div>
+
+        <button id="logoutButton" class="btn">Wyloguj się</button>
     </div>
 
-    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <script>
+        // Ініціалізація Supabase
+        const supabaseUrl = 'https://your-supabase-url'; // Замість цього вставте свій URL
+        const supabaseKey = 'your-anon-key'; // Замість цього вставте свій анонімний ключ
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
         // Перевірка авторизації
         const user = supabase.auth.user();
         if (!user) {
@@ -22,9 +32,8 @@
             window.location.href = "index.html"; // Перенаправлення на index.html
         }
 
-        // Тут ви можете додати код для отримання та відображення постів
+        // Завантажити пости
         async function loadPosts() {
-            // Код для отримання постів з бази даних
             const { data: posts, error } = await supabase
                 .from('posts')
                 .select('*');
@@ -37,12 +46,54 @@
             const postsContainer = document.getElementById('postsContainer');
             posts.forEach(post => {
                 const postElement = document.createElement('div');
+                postElement.className = 'post'; // Додайте клас для стилізації постів
                 postElement.innerHTML = `<h3>${post.title}</h3><p>${post.content}</p>`;
                 postsContainer.appendChild(postElement);
             });
         }
 
         loadPosts(); // Завантажити пости при завантаженні сторінки
+
+        // Вихід з облікового запису
+        document.getElementById('logoutButton').addEventListener('click', async () => {
+            const { error } = await supabase.auth.signOut();
+            if (error) {
+                console.error("Błąd podczas wylogowywania:", error);
+            } else {
+                alert("Wylogowano pomyślnie!");
+                window.location.href = "index.html"; // Перенаправлення на index.html
+            }
+        });
     </script>
+
+    <style>
+        /* Додаткові стилі для постів */
+        #postsContainer {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .post {
+            background: linear-gradient(38deg, #093954, #5F829C);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            margin-bottom: 15px;
+            width: 80%;
+            color: #fff;
+        }
+
+        .post h3 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .post p {
+            font-size: 1rem;
+            color: #d1d1d1;
+        }
+    </style>
 </body>
 </html>
